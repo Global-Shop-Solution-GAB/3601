@@ -1,0 +1,521 @@
+Program.Sub.ScreenSU.Start
+gui.SS_Form1..create
+gui.SS_Form1..caption("Upload Part Frag Info")
+gui.SS_Form1..size(6765,1550)
+gui.SS_Form1..position(0,0)
+gui.SS_Form1..event(unload,ss_form1_unload)
+gui.SS_Form1..alwaysontop(False)
+gui.SS_Form1..fontname("Arial")
+gui.SS_Form1..fontsize(8)
+gui.SS_Form1..forecolor(0)
+gui.SS_Form1..fontstyle(,,,,)
+gui.SS_Form1..BackColor(-2147483633)
+gui.SS_Form1..controlbox(True)
+gui.SS_Form1..maxbutton(False)
+gui.SS_Form1..minbutton(False)
+gui.SS_Form1..mousepointer(0)
+gui.SS_Form1..moveable(True)
+gui.SS_Form1..sizeable(False)
+gui.SS_Form1..ShowInTaskBar(True)
+gui.SS_Form1..titlebar(True)
+gui.SS_Form1.lblSpreadsheet.create(label,"Spreadsheet Location",True,1800,200,1,100,100,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtSpreadsheet.create(textbox,"",True,6000,330,0,100,300,True,0,Arial,8,16777215,1)
+gui.SS_Form1.cmd_txtSpreadsheet.create(button)
+gui.SS_Form1.cmd_txtSpreadsheet.caption("^")
+gui.SS_Form1.cmd_txtSpreadsheet.visible(True)
+gui.SS_Form1.cmd_txtSpreadsheet.size(330,330)
+gui.SS_Form1.cmd_txtSpreadsheet.zorder(0)
+gui.SS_Form1.cmd_txtSpreadsheet.position(6200,300)
+gui.SS_Form1.cmd_txtSpreadsheet.enabled(True)
+gui.SS_Form1.cmd_txtSpreadsheet.fontname("Arial")
+gui.SS_Form1.cmd_txtSpreadsheet.fontsize(8)
+gui.SS_Form1.cmd_txtSpreadsheet.event(click,cmd_txtspreadsheet_click)
+gui.SS_Form1.cmdOK.create(button)
+gui.SS_Form1.cmdOK.caption("Ok")
+gui.SS_Form1.cmdOK.visible(True)
+gui.SS_Form1.cmdOK.size(1000,360)
+gui.SS_Form1.cmdOK.zorder(0)
+gui.SS_Form1.cmdOK.position(100,680)
+gui.SS_Form1.cmdOK.enabled(True)
+gui.SS_Form1.cmdOK.fontname("Arial")
+gui.SS_Form1.cmdOK.fontsize(8)
+gui.SS_Form1.cmdOK.event(click,cmdok_click)
+gui.SS_Form1.txtSpreadsheet.tabstop(true)
+gui.SS_Form1.txtSpreadsheet.tabindex(1)
+gui.SS_Form1.cmd_txtSpreadsheet.tabstop(true)
+gui.SS_Form1.cmd_txtSpreadsheet.tabindex(2)
+gui.SS_Form1.cmdOK.tabstop(true)
+gui.SS_Form1.cmdOK.tabindex(3)
+
+
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+
+Variable.UDT.LPF.Define("Diameter",String,"DIAMETER")
+Variable.UDT.LPF.Define("Class",String,"CLASS")
+Variable.UDT.LPF.Define("LPF",Float,"LBPERFOOT")
+Variable.UDT.LBS.Define("Type",String,"SELECTION_TYPE")
+Variable.UDT.LBS.Define("Frag",String,"FRAGMENT")
+Variable.UDT.LBS.Define("LBS",Float,"WEIGHT")
+Variable.UDT.LBS.Define("Diameter",Float,"DIAMETER")
+Variable.UDT.Frag.Define("Type",String,"FRAG_TYPE")
+Variable.UDT.Frag.Define("Frag",String,"PART_FRAGMENT")
+Variable.UDT.Frag.Define("Cat_CD",String,"CAT_CD")
+Variable.uGlobal.uFrags.Declare("Frag")
+Variable.uGlobal.uSavedLPF.Declare("LPF")
+Variable.uGlobal.uSavedLBS.Declare("LBS")
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'Coded by: SMC
+'Project Start Date: 4/29/2011
+'Hooks
+'  Custom Menu Item
+'Notes:
+'  Quote 2058 for Customer C& B Piping
+'
+'  First a GAB program will be hooked to one of the Script buttons on the Part Number Generator screen.  When launched the program will have two text boxes with browsers.  The browsers will allow the user to select a fragment selection from the PART_GEN_FRAGMENT
+'  table.  The first field is DIAMETER which is CAT_ID 04 in table.  The next is CLASS which is CAT_ID 08 in table.  The user will select a DIAMETER, then a CLASS, and there will be a text box that labelled with Lbs Per Foot.  The user will put in a pound per foot number into
+'  this field and click save.  This will be saved to a table with:  ATG_PART_FRAG_LPF (DIAMETER, CLASS, LBPERFOOT)
+'
+'  If the user comes back and selects a DIAMETER and CLASS that already have a record existing it will open that record back up and populate the Lbs per foot into the text box.
+'
+'  Another GAB program will be also hooked to a Script BUTTON.  This one the user will have a drop down selection to pick LEADING END, MIDDLE, or TRAILING END DIAMETER.  Once selected there will be a browser to select CAT_ID 01,02,03, 04 based on selection
+'  made in drop down.  The user will be a fragment choice and then a text box will ask for Weight.  This will be a number field.  This information will be stored into a table:  ATG_PART_FRAG_LBS (SELECTION_TYPE, FRAGMENT, WEIGHT)
+'
+'  A program will be hooked to the Post-Create hook.  this program will check each of the forementioned categories to calculate a weight to save to the inventory master record of the part being generated.  LEADING END, MIDDLE AND TRAILING END will be added together.
+'   The LENGTH FEET, LENTH INCH, AND LENTH INCH 16THS, will have to be calculated out to a number based on a foot, and multiplied by the weight per foot of the DIAMETER/CLASS selection made.  This # is then added into the first calculation for a total weight of part.
+'
+'  Lastly there will be a GAB program for uploading fragments and weights into the table from a Excel spreadsheet.  As well as uploading the lbs per ft based on diameter and class.
+
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+F.Intrinsic.Control.CallSub(Load_frags)
+Gui.SS_Form1..Show
+
+Program.Sub.Main.End
+
+program.sub.ss_form1_unload.start
+F.ODBC.Connection!conx.Close
+f.Intrinsic.Control.End
+
+program.sub.ss_form1_unload.end
+
+program.sub.cmd_txtspreadsheet_click.start
+V.Local.sFile.Declare(String)
+
+F.Intrinsic.UI.ShowOpenFileDialog("","*.xls","",V.local.sFile)
+
+F.Intrinsic.Control.If(V.Local.sFile,<>,"***CANCEL***")
+	Gui.SS_Form1.txtSpreadsheet.Text(V.Local.sFile)
+F.Intrinsic.Control.EndIf
+
+
+program.sub.cmd_txtspreadsheet_click.end
+
+program.sub.cmdok_click.start
+V.Local.sXLS.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.bExists.Declare(String)
+V.Local.sMsg.Declare(String)
+V.Local.sTemp.Declare(String)
+V.Local.sTemp.Redim(0,3)
+
+F.Intrinsic.String.UCase(V.Screen.SS_Form1!txtSpreadsheet.Text,V.Local.sFile)
+F.Intrinsic.File.Exists(V.Local.sFile,V.Local.bExists)
+F.Intrinsic.Control.If(V.Local.bExists,=,False)
+	F.Intrinsic.UI.Msgbox("File does not exist")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.ElseIf(V.Local.sFile.right4,<>,".XLS")
+	F.Intrinsic.UI.Msgbox("Please select a .xls")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+Gui.SS_Form1..Enabled(False)
+F.Intrinsic.UI.InvokeWaitDialog("Reading spreadsheet...","Part Frag Upload")
+
+F.Automation.MSExcel.CreateAppObject("ExcelApp")
+F.Automation.MSExcel.OpenWorkbook("ExcelApp","PARTFRAG",V.Local.sFile)
+F.Automation.MSExcel.OpenWorksheet("ExcelApp","FRAG",1)
+
+F.Automation.MSExcel.ReadCell("FRAG",1,1,V.Local.sTemp(0))
+F.Automation.MSExcel.ReadCell("FRAG",1,2,V.Local.sTemp(1))
+F.Automation.MSExcel.ReadCell("FRAG",1,3,V.Local.sTemp(2))
+F.Automation.MSExcel.ReadCell("FRAG",1,4,V.Local.sTemp(3))
+F.Intrinsic.String.Concat(V.Local.sTemp(0).Trim,":",V.Local.sTemp(1).Trim,":",V.Local.sTemp(2).Trim,":",V.Local.sTemp(3).Trim,V.Local.sXLS)
+
+F.Automation.Generic.DestroyObject("PARTFRAG")
+F.Automation.Generic.DestroyObject("FRAG")
+F.Automation.Generic.DestroyObject("ExcelApp")
+
+F.Intrinsic.Control.SelectCase(V.Local.sXLS.UCase)
+	F.Intrinsic.Control.Case("DIAMETER:CLASS:LBPERFOOT:")
+		F.Intrinsic.Control.CallSub("LPF")
+	F.Intrinsic.Control.Case("SELECTION TYPE:FRAGMENT:DIAMETER:WEIGHT")
+		F.Intrinsic.Control.CallSub("LBS")
+	F.Intrinsic.Control.CaseElse
+		F.Intrinsic.String.Concat("Invalid spreadsheet.",V.Ambient.NewLine,V.Ambient.NewLine,"The column headers of a Fragments/Weights Spreadsheet must read: Selection Type, Fragment, Weight",V.Ambient.NewLine,V.Ambient.NewLine,"The column headers for a Lbs Per Foot Spreadsheet must read: Diameter, Class, LBPerFoot",V.Ambient.NewLine,V.Ambient.NewLine,"Column headers must be in order but are not case sensitive",,V.Local.sMsg)
+		F.Intrinsic.UI.Msgbox(V.Local.sMsg)
+F.Intrinsic.Control.EndSelect
+
+F.Intrinsic.UI.CloseWaitDialog
+Gui.SS_Form1..Enabled(True)
+
+program.sub.cmdok_click.end
+
+Program.Sub.LPF.Start
+V.Local.sXLS.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRows.Declare(String)
+V.Local.sCols.Declare(String)
+V.Local.iR.Declare(Long)
+V.Local.iC.Declare(Long)
+V.Local.sRet.Declare(String)
+V.Local.sInvalid.Declare(String)
+V.Local.iUB.Declare(Long,-1)
+V.uLocal.uXLS.Declare(Lpf)
+V.uLocal.uXLS.Redim(-1,-1)
+V.Local.sError.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.iRet.Declare(Long)
+V.Local.sUpdated.Declare(String)
+
+F.Intrinsic.Control.SetErrorHandler("Sub_Err")
+F.Intrinsic.Control.ClearErrors
+
+F.Intrinsic.Control.CallSub(Readspreadsheet)
+
+F.Intrinsic.Control.If(V.Args.sXLS.Trim,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLPF","SELECT * FROM ATG_3601_PART_FRAG_LPF")
+F.Intrinsic.Variable.LoadUDTFromRecordset("conx","rstLPF","v.uGlobal.uSavedLPF",False)
+F.ODBC.conx!rstLPF.Close
+
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+F.Intrinsic.UI.ChangeWaitStatus("Processing ....")
+F.Intrinsic.String.Split(V.args.sXLS,"$!$",V.Local.sRows)
+F.Intrinsic.Control.For(V.Local.iR,1,V.Local.sRows.UBound,1)
+	F.Intrinsic.String.Split(V.Local.sRows(v.Local.iR),"*!*",V.Local.sCols)
+	V.Local.sCols(0).Set(V.Local.sCols(0).Trim)
+	V.Local.sCols(1).Set(V.Local.sCols(1).Trim)
+	V.Local.sCols(2).Set(V.Local.sCols(2).Trim)
+	F.Intrinsic.Control.CallSub(Valid_lpf,"Diameter",V.Local.sCols(0),"Class",V.Local.sCols(1),"LPF",V.Local.sCols(2))
+
+	F.Intrinsic.Control.If(V.Args.sMsg,<>,"")
+		F.Intrinsic.Control.If(V.Local.sInvalid,=,"")
+			F.Intrinsic.String.Concat("Unable to upload the following Lbs Per Foot:",V.Ambient.NewLine,"Diameter: ",V.Args.sDiameter," Class: ",V.Local.sCols(1)," Lbs Per Foot: ",V.Local.sCols(2)," - ",V.Args.sMsg,V.Local.sInvalid)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sInvalid,V.Ambient.NewLine,"Diameter: ",V.Args.sDiameter," Class: ",V.Local.sCols(1)," Lbs Per Foot: ",V.Local.sCols(2)," - ",V.Args.sMsg,V.Local.sInvalid)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Math.Add(V.Local.iUB,1,V.Local.iUB)
+		F.Intrinsic.Control.If(V.Local.iUB,=,0)
+			V.uLocal.uXLS.Redim(0,0)
+		F.Intrinsic.Control.Else
+			V.uLocal.uXLS.RedimPreserve(0,V.Local.iUB)
+		F.Intrinsic.Control.EndIf
+		V.uLocal.uXLS(v.Local.iUB)!Diameter.Set(V.Args.sDiameter)
+		V.uLocal.uXLS(v.Local.iUB)!Class.Set(V.Local.sCols(1))
+		V.uLocal.uXLS(v.Local.iUB)!LPF.Set(V.Local.sCols(2).Float)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.Next(V.Local.iR)
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+
+F.Intrinsic.UI.ChangeWaitStatus("Uploading to table ....")
+F.Intrinsic.Control.For(V.Local.iC,0,V.uLocal.uXLS.UBound,1)
+	F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LPF WHERE CLASS='",V.uLocal.uXLS(v.Local.iC)!Class,"' AND DIAMETER='",V.uLocal.uXLS(v.Local.iC)!Diameter,"'",V.Local.sQuery)
+	F.ODBC.Connection!conx.OpenRecordsetRW("rstAdd",V.Local.sQuery)
+	F.Intrinsic.Control.If(V.ODBC.conx!rstAdd.EOF,=,True)
+		F.ODBC.conx!rstAdd.AddNew
+		F.ODBC.conx!rstAdd.Set!DIAMETER(V.uLocal.uXLS(v.Local.iC)!Diameter)
+		F.ODBC.conx!rstAdd.Set!CLASS(V.uLocal.uXLS(v.Local.iC)!Class)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Control.If(V.Local.sUpdated,=,"")
+			F.Intrinsic.String.Concat("Updated the following Lbs Per Foot: ",V.Ambient.NewLine,"Diameter: ",V.uLocal.uXLS(v.Local.iC)!Diameter," Class: ",V.uLocal.uXLS(v.Local.iC)!Class," Lbs Per Foot: ",V.ODBC.conx!rstAdd.FieldVal!LBPERFOOT," > ",V.uLocal.uXLS(v.Local.iC)!LPF,V.Local.sUpdated)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sUpdated,V.Ambient.NewLine,"Diameter: ",V.uLocal.uXLS(v.Local.iC)!Diameter," Class: ",V.uLocal.uXLS(v.Local.iC)!Class," Lbs Per Foot: ",V.ODBC.conx!rstAdd.FieldVal!LBPERFOOT," > ",V.uLocal.uXLS(v.Local.iC)!LPF,V.Local.sUpdated)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx!rstAdd.Set!LBPERFOOT(V.uLocal.uXLS(v.Local.iC)!LPF)
+	F.ODBC.conx!rstAdd.Update
+	F.ODBC.conx!rstAdd.Close
+F.Intrinsic.Control.Next(V.Local.iC)
+
+F.Intrinsic.Control.If(V.Local.sInvalid,<>,"")
+	F.Intrinsic.String.Concat(V.Local.sInvalid,V.Ambient.NewLine,V.Ambient.NewLine,V.Ambient.NewLine,V.Local.sUpdated,V.Local.sInvalid)
+F.Intrinsic.Control.Else
+	V.Local.sInvalid.Set(V.Local.sUpdated)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.Local.sInvalid,<>,"")
+	F.Intrinsic.String.Concat(V.Caller.TempDir,"\Invalid_Part_Frags",V.Caller.Terminal,".txt",V.Local.sFile)
+	F.Intrinsic.File.String2File(V.Local.sFile,V.Local.sInvalid)
+	F.Intrinsic.File.GetHandle(V.Local.iRet)
+	F.Intrinsic.Task.ShellExec(V.Caller.Handle,"OPEN",V.Local.sFile,"","",5)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Sub_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+
+Program.Sub.LPF.End
+
+Program.Sub.LBS.Start
+V.Local.sXLS.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRows.Declare(String)
+V.Local.sCols.Declare(String)
+V.Local.iR.Declare(Long)
+V.Local.iC.Declare(Long)
+V.Local.sRet.Declare(String)
+V.Local.sInvalid.Declare(String)
+V.Local.iUB.Declare(Long,-1)
+V.uLocal.uXLSLbs.Declare(Lbs)
+V.uLocal.uXLSLbs.Redim(-1,-1)
+V.Local.sError.Declare(String)
+V.Local.sFile.Declare(String)
+V.Local.iRet.Declare(Long)
+V.Local.sUpdated.Declare(String)
+
+F.Intrinsic.Control.SetErrorHandler("Sub_Err")
+F.Intrinsic.Control.ClearErrors
+
+F.Intrinsic.Control.CallSub(Readspreadsheet)
+
+F.Intrinsic.Control.If(V.Args.sXLS.Trim,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLPF","SELECT * FROM ATG_3601_PART_FRAG_LBS")
+F.Intrinsic.Variable.LoadUDTFromRecordset("conx","rstLPF","v.uGlobal.uSavedLBS",False)
+F.ODBC.conx!rstLPF.Close
+
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+F.Intrinsic.UI.ChangeWaitStatus("Processing ....")
+F.Intrinsic.String.Split(V.args.sXLS,"$!$",V.Local.sRows)
+F.Intrinsic.Control.For(V.Local.iR,1,V.Local.sRows.UBound,1)
+	F.Intrinsic.String.Split(V.Local.sRows(v.Local.iR),"*!*",V.Local.sCols)
+	V.Local.sCols(0).Set(V.Local.sCols(0).Trim)
+	V.Local.sCols(1).Set(V.Local.sCols(1).Trim)
+	V.Local.sCols(2).Set(V.Local.sCols(2).Trim)
+	V.Local.sCols(3).Set(V.Local.sCols(3).Trim)
+	F.Intrinsic.Control.CallSub(Valid_lbs,"Type",V.Local.sCols(0),"Fragment",V.Local.sCols(1),"Diameter",V.Local.sCols(2),"LBS",V.Local.sCols(3))
+
+	F.Intrinsic.Control.If(V.Args.sMsg,<>,"")
+		F.Intrinsic.Control.If(V.Local.sInvalid,=,"")
+			F.Intrinsic.String.Concat("Unable to upload the following Weights:",V.Ambient.NewLine,"Selection: ",V.Local.sCols(0)," Fragment: ",V.Local.sCols(1)," Diameter: ",V.Local.sCols(2)," Weight: ",V.Local.sCols(3)," - ",V.Args.sMsg,V.Local.sInvalid)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sInvalid,V.Ambient.NewLine,"Selection: ",V.Local.sCols(0)," Fragment: ",V.Local.sCols(1)," Diameter: ",V.Local.sCols(2)," Weight: ",V.Local.sCols(3)," - ",V.Args.sMsg,V.Local.sInvalid)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Math.Add(V.Local.iUB,1,V.Local.iUB)
+		F.Intrinsic.Control.If(V.Local.iUB,=,0)
+			V.uLocal.uXLSLbs.Redim(0,0)
+		F.Intrinsic.Control.Else
+			V.uLocal.uXLSLbs.RedimPreserve(0,V.Local.iUB)
+		F.Intrinsic.Control.EndIf
+		V.uLocal.uXLSLbs(v.Local.iUB)!Type.Set(V.Local.sCols(0))
+		V.uLocal.uXLSLbs(v.Local.iUB)!Frag.Set(V.Local.sCols(1))
+		V.uLocal.uXLSLbs(v.Local.iUB)!Diameter.Set(V.Local.sCols(2).Float)
+		V.uLocal.uXLSLbs(v.Local.iUB)!LBS.Set(V.Local.sCols(3).Float)
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.Next(V.Local.iR)
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+
+F.Intrinsic.UI.ChangeWaitStatus("Uploading to table ....")
+F.Intrinsic.Control.For(V.Local.iC,0,V.uLocal.uXLSLbs.UBound,1)
+	F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='",V.uLocal.uXLSLbs(v.Local.iC)!Type,"' AND FRAGMENT='",V.uLocal.uXLSLbs(v.Local.iC)!Frag,"' AND DIAMETER=",V.uLocal.uXLSLbs(v.Local.iC)!Diameter,V.Local.sQuery)
+	F.ODBC.Connection!conx.OpenRecordsetRW("rstAdd",V.Local.sQuery)
+	F.Intrinsic.Control.If(V.ODBC.conx!rstAdd.EOF,=,True)
+		F.ODBC.conx!rstAdd.AddNew
+		F.ODBC.conx!rstAdd.Set!SELECTION_TYPE(V.uLocal.uXLSLbs(v.Local.iC)!Type)
+		F.ODBC.conx!rstAdd.Set!FRAGMENT(V.uLocal.uXLSLbs(v.Local.iC)!Frag)
+		F.ODBC.conx!rstAdd.Set!DIAMETER(V.uLocal.uXLSLbs(v.Local.iC)!Diameter)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Control.If(V.Local.sUpdated,=,"")
+			F.Intrinsic.String.Concat("Updated the following Weights: ",V.Ambient.NewLine,"Selection Type: ",V.uLocal.uXLSLbs(v.Local.iC)!Type," Fragment: ",V.uLocal.uXLSLbs(v.Local.iC)!Frag," Diameter: ",V.uLocal.uXLSLbs(v.Local.iC)!Diameter," Weight: ",V.ODBC.conx!rstAdd.FieldVal!WEIGHT," > ",V.uLocal.uXLSLbs(v.Local.iC)!LBS,V.Local.sUpdated)
+		F.Intrinsic.Control.Else
+			F.Intrinsic.String.Concat(V.Local.sUpdated,V.Ambient.NewLine,"Selection Type: ",V.uLocal.uXLSLbs(v.Local.iC)!Type," Fragment: ",V.uLocal.uXLSLbs(v.Local.iC)!Frag," Diameter: ",V.uLocal.uXLSLbs(v.Local.iC)!Diameter," Weight: ",V.ODBC.conx!rstAdd.FieldVal!WEIGHT," > ",V.uLocal.uXLSLbs(v.Local.iC)!LBS,V.Local.sUpdated)
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+	F.ODBC.conx!rstAdd.Set!WEIGHT(V.uLocal.uXLSLbs(v.Local.iC)!LBS)
+	F.ODBC.conx!rstAdd.Update
+	F.ODBC.conx!rstAdd.Close
+F.Intrinsic.Control.Next(V.Local.iC)
+
+F.Intrinsic.Control.If(V.Local.sInvalid,<>,"")
+	F.Intrinsic.String.Concat(V.Local.sInvalid,V.Ambient.NewLine,V.Ambient.NewLine,V.Ambient.NewLine,V.Local.sUpdated,V.Local.sInvalid)
+F.Intrinsic.Control.Else
+	V.Local.sInvalid.Set(V.Local.sUpdated)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.Local.sInvalid,<>,"")
+	F.Intrinsic.String.Concat(V.Caller.TempDir,"\Invalid_Part_Frags",V.Caller.Terminal,".txt",V.Local.sFile)
+	F.Intrinsic.File.String2File(V.Local.sFile,V.Local.sInvalid)
+	F.Intrinsic.File.GetHandle(V.Local.iRet)
+	F.Intrinsic.Task.ShellExec(V.Caller.Handle,"OPEN",V.Local.sFile,"","",5)
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.ExitSub
+
+F.Intrinsic.Control.Label("Sub_Err")
+F.Intrinsic.Control.If(V.Ambient.ErrorNumber,<>,0)
+	Function.Intrinsic.String.Concat("Subroutine: ",V.Ambient.CurrentSubroutine,V.Ambient.NewLine,"Error Occurred ",V.Ambient.ErrorNumber," with description ",V.Ambient.ErrorDescription,V.Local.sError)
+	F.Intrinsic.UI.Msgbox(V.Local.sError)
+Function.Intrinsic.Control.EndIf
+
+
+
+
+
+Program.Sub.LBS.End
+
+Program.Sub.ReadSpreadsheet.Start
+V.Local.bRet.Declare(Boolean)
+V.Local.sXLS.Declare(String)
+
+F.Automation.MSExcel.CheckPresence(V.Local.bRet)
+F.Intrinsic.Control.If(V.Local.bRet,=,True)
+'	F.Automation.MSExcel.ReadSpreadsheet(V.Screen.F_Update_Price!txtSpreadsheet.Text,2,101,V.Local.sXLS)
+	F.Automation.MSExcel.ReadSpreadsheet(V.Screen.SS_Form1!txtSpreadsheet.Text,4,1000,V.Local.sXLS)
+F.Intrinsic.Control.Else
+	F.Automation.OOGeneral.CheckPresence(V.Local.bRet)
+	F.Intrinsic.Control.If(V.Local.bRet,=,True)
+'		F.Automation.OOCalc.ReadSpreadsheet(V.Screen.F_Update_Price!txtSpreadsheet.Text,False,2,101,V.Local.sXLS)
+		F.Automation.OOCalc.ReadSpreadsheet(V.Screen.SS_Form1!txtSpreadsheet.Text,False,4,1000,V.Local.sXLS)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.UI.Msgbox("Microsoft Excel or OOCalc required to execute .xls import")
+		F.Intrinsic.Control.ExitSub
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.String.Split(V.Local.sXLS,"&^&",V.Local.sXLS)
+F.Intrinsic.Variable.AddRV("sXLS",V.Local.sXLS(0))
+
+Program.Sub.ReadSpreadsheet.End
+
+Program.Sub.Load_Frags.Start
+V.Local.sQuery.Declare(String)
+
+F.Intrinsic.UI.InvokeWaitDialog("Loading ... ")
+V.Local.sQuery.Set("SELECT CAT_CD, PART_FRAGMENT, 'Leading End' as FRAG_TYPE FROM PART_GEN_FRAGMENT WHERE CAT_CD IN ('01','02','03','04','08')")
+F.ODBC.Connection!conx.OpenRecordsetRO("rstFrag",V.Local.sQuery)
+F.Intrinsic.Variable.LoadUDTFromRecordset("conx","rstFrag","V.uGlobal.uFrags",False)
+F.ODBC.conx!rstFrag.Close
+
+F.Intrinsic.Variable.UDTMultiSeekSet(V.uGlobal.uFrags!Cat_CD,"01",V.uGlobal.uFrags!Type,"Leading End")
+F.Intrinsic.Variable.UDTMultiSeekSet(V.uGlobal.uFrags!Cat_CD,"02",V.uGlobal.uFrags!Type,"Middle")
+F.Intrinsic.Variable.UDTMultiSeekSet(V.uGlobal.uFrags!Cat_CD,"03",V.uGlobal.uFrags!Type,"Trailing End")
+F.Intrinsic.Variable.UDTMultiSeekSet(V.uGlobal.uFrags!Cat_CD,"04",V.uGlobal.uFrags!Type,"Diameter")
+F.Intrinsic.Variable.UDTMultiSeekSet(V.uGlobal.uFrags!Cat_CD,"08",V.uGlobal.uFrags!Type,"Class")
+
+F.Intrinsic.UI.CloseWaitDialog
+
+Program.Sub.Load_Frags.End
+
+Program.Sub.Valid_LPF.Start
+V.Local.sRet.Declare(String)
+V.Local.sMsg.Declare(String)
+V.Local.sDiameter.Declare(String)
+V.Local.bNumeric.Declare(Boolean)
+
+F.Intrinsic.Math.IsNumeric(V.Args.LPF,V.Local.bNumeric)
+F.Intrinsic.Control.If(V.Local.bNumeric,<>,True)
+	V.Local.sMsg.Set("Invalid Lbs per foot")
+F.Intrinsic.Control.Else
+	'Check Diameter exists as long of formated as a char 2
+	f.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uFrags!Type,"Diameter",V.uGlobal.uFrags!Frag,V.args.Diameter,V.Local.sRet)
+	F.Intrinsic.Control.If(V.Local.sRet,=,"")
+		F.Intrinsic.String.LPad(V.Args.Diameter,"0",2,V.Local.sDiameter)
+		f.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uFrags!Type,"Diameter",V.uGlobal.uFrags!Frag,V.Local.sDiameter,V.Local.sRet)
+	F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.If(V.Local.sRet,=,"")
+		V.Local.sMsg.Set("Invalid Diameter")
+		V.Local.sDiameter.Set(V.Args.Diameter)
+	F.Intrinsic.Control.Else
+		F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+		V.Local.sDiameter.Set(V.uGlobal.uFrags(v.local.sRet(0))!Frag)
+
+		f.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uFrags!Type,"Class",V.uGlobal.uFrags!Frag,V.args.Class,V.Local.sRet)
+		F.Intrinsic.Control.If(V.Local.sRet,=,"")
+			V.Local.sMsg.Set("Invalid Class")
+		F.Intrinsic.Control.Else
+'			f.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uSavedLPF!Class,V.Args.Class,V.uGlobal.uSavedLPF!Diameter,V.Local.sDiameter,V.Local.sRet)
+'			F.Intrinsic.Control.If(V.Local.sRet,<>,"")
+'				V.Local.sMsg.Set("Lbs Per Foot has already been set")
+'			F.Intrinsic.Control.EndIf
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Variable.AddRV("sMsg",V.Local.sMsg)
+F.Intrinsic.Variable.AddRV("sDiameter",V.Local.sDiameter)
+
+Program.Sub.Valid_LPF.End
+
+Program.Sub.Valid_LBS.Start
+V.Local.sRet.Declare(String)
+V.Local.sMsg.Declare(String)
+V.Local.sType.Declare(String)
+V.Local.bNumeric.Declare(Boolean)
+
+F.Intrinsic.Control.SelectCase(V.Args.Type.UCase)
+	F.Intrinsic.Control.Case("LEADING END")
+		V.Local.sType.Set("Leading End")
+	F.Intrinsic.Control.Case("MIDDLE")
+		V.Local.sType.Set("Middle")
+	F.Intrinsic.Control.Case("TRAILING END")
+		V.Local.sType.Set("Trailing End")
+F.Intrinsic.Control.EndSelect
+
+F.Intrinsic.Math.IsNumeric(V.Args.Diameter,V.Local.bNumeric)
+F.Intrinsic.Control.If(V.Local.bNumeric,<>,True)
+	V.Local.sMsg.Set("Invalid Diameter")
+F.Intrinsic.Control.Else
+	F.Intrinsic.Math.IsNumeric(V.Args.LBS,V.Local.bNumeric)
+	F.Intrinsic.Control.If(V.Local.bNumeric,<>,True)
+		V.Local.sMsg.Set("Invalid Weight")
+	F.Intrinsic.Control.Else
+		F.Intrinsic.Control.If(V.Local.sType,<>,"")
+			F.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uFrags!Type,V.Local.sType,V.uGlobal.uFrags!Frag,V.Args.Fragment,V.Local.sRet)
+			F.Intrinsic.Control.If(V.Local.sRet,=,"")
+				V.Local.sMsg.Set("Invalid Fragment")
+			F.Intrinsic.Control.Else
+	'			F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	'			f.Intrinsic.Variable.UDTMultiSeek(V.uGlobal.uSavedLBS!Type,V.Local.sType,V.uGlobal.uSavedLBS!Frag,V.Args.Fragment,V.Local.sRet)
+	'			F.Intrinsic.Control.If(V.Local.sRet,<>,"")
+	'				V.Local.sMsg.Set("Weight has already been set")
+	'			F.Intrinsic.Control.EndIf
+			F.Intrinsic.Control.EndIf
+		F.Intrinsic.Control.Else
+			V.Local.sMsg.Set("Invalid selection type")
+		F.Intrinsic.Control.EndIf
+	F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Variable.AddRV("sMsg",V.Local.sMsg)
+
+
+Program.Sub.Valid_LBS.End
+
+Program.Sub.ScreenSS.Start
+SS_Form1{{CAPTION::Upload Part Frag Info
+SS_Form1.CTRL{{NAME::lblSpreadsheet\\TYPE::1\\CAPTION::Spreadsheet Location\\GROUP::-1\\BROWSER::0
+SS_Form1.CTRL{{NAME::txtSpreadsheet\\TYPE::2\\TABSTOP::1\\GROUP::-1\\BROWSER::1
+SS_Form1.CTRL{{NAME::cmdOK\\TYPE::5\\CAPTION::Ok\\TABSTOP::2\\GROUP::-1\\BROWSER::0
+
+Program.Sub.ScreenSS.End
+
