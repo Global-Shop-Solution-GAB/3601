@@ -1,0 +1,586 @@
+Program.Sub.ScreenSU.Start
+gui.SS_Form1..create
+gui.SS_Form1..caption("Lbs Per Foot")
+gui.SS_Form1..size(2630,2710)
+gui.SS_Form1..position(0,0)
+gui.SS_Form1..event(unload,Unload)
+gui.SS_Form1..alwaysontop(False)
+gui.SS_Form1..fontname("Arial")
+gui.SS_Form1..fontsize(8)
+gui.SS_Form1..forecolor(0)
+gui.SS_Form1..fontstyle(,,,,)
+gui.SS_Form1..BackColor(-2147483633)
+gui.SS_Form1..controlbox(True)
+gui.SS_Form1..maxbutton(False)
+gui.SS_Form1..minbutton(False)
+gui.SS_Form1..mousepointer(0)
+gui.SS_Form1..moveable(True)
+gui.SS_Form1..sizeable(False)
+gui.SS_Form1..ShowInTaskBar(True)
+gui.SS_Form1..titlebar(True)
+gui.SS_Form1.lbl_txtDiameter.create(label,"Diameter",True,1800,200,1,100,100,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtDiameter.create(textbox,"",True,1800,330,0,100,300,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtDiameter.event(change,txtdiameter_change)
+gui.SS_Form1.cmd_txtDiameter.create(button)
+gui.SS_Form1.cmd_txtDiameter.caption("^")
+gui.SS_Form1.cmd_txtDiameter.visible(True)
+gui.SS_Form1.cmd_txtDiameter.size(330,330)
+gui.SS_Form1.cmd_txtDiameter.zorder(0)
+gui.SS_Form1.cmd_txtDiameter.position(1950,300)
+gui.SS_Form1.cmd_txtDiameter.enabled(True)
+gui.SS_Form1.cmd_txtDiameter.fontname("Arial")
+gui.SS_Form1.cmd_txtDiameter.fontsize(8)
+gui.SS_Form1.cmd_txtDiameter.event(click,cmd_txtdiameter_click)
+gui.SS_Form1.lbl_txtClass.create(label,"Class",True,1800,200,1,100,680,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtClass.create(textbox,"",True,1800,330,0,100,880,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtClass.event(change,txtclass_change)
+gui.SS_Form1.cmd_txtClass.create(button)
+gui.SS_Form1.cmd_txtClass.caption("^")
+gui.SS_Form1.cmd_txtClass.visible(True)
+gui.SS_Form1.cmd_txtClass.size(330,330)
+gui.SS_Form1.cmd_txtClass.zorder(0)
+gui.SS_Form1.cmd_txtClass.position(1950,880)
+gui.SS_Form1.cmd_txtClass.enabled(True)
+gui.SS_Form1.cmd_txtClass.fontname("Arial")
+gui.SS_Form1.cmd_txtClass.fontsize(8)
+gui.SS_Form1.cmd_txtClass.event(click,cmd_txtclass_click)
+gui.SS_Form1.lbl_txtLbsPerFoot.create(label,"Lbs Per Foot",True,1800,200,1,100,1260,True,0,Arial,8,-2147483633,0)
+gui.SS_Form1.txtLbsPerFoot.create(textbox,"",True,1800,330,0,100,1460,True,0,Arial,8,16777215,1)
+gui.SS_Form1.txtLbsPerFoot.numericonly(1)
+gui.SS_Form1.cmdSave.create(button)
+gui.SS_Form1.cmdSave.caption("Save")
+gui.SS_Form1.cmdSave.visible(True)
+gui.SS_Form1.cmdSave.size(1000,360)
+gui.SS_Form1.cmdSave.zorder(0)
+gui.SS_Form1.cmdSave.position(100,1840)
+gui.SS_Form1.cmdSave.enabled(True)
+gui.SS_Form1.cmdSave.fontname("Arial")
+gui.SS_Form1.cmdSave.fontsize(8)
+gui.SS_Form1.cmdSave.event(click,Save_Lbs_Per_Foot)
+gui.SS_Form1.cmdSave.disableonclick(10)
+gui.SS_Form1.txtDiameter.tabstop(true)
+gui.SS_Form1.txtDiameter.tabindex(1)
+gui.SS_Form1.cmd_txtDiameter.tabstop(true)
+gui.SS_Form1.cmd_txtDiameter.tabindex(2)
+gui.SS_Form1.txtClass.tabstop(true)
+gui.SS_Form1.txtClass.tabindex(3)
+gui.SS_Form1.cmd_txtClass.tabstop(true)
+gui.SS_Form1.cmd_txtClass.tabindex(4)
+gui.SS_Form1.txtLbsPerFoot.tabstop(true)
+gui.SS_Form1.txtLbsPerFoot.tabindex(5)
+gui.SS_Form1.cmdSave.tabstop(true)
+gui.SS_Form1.cmdSave.tabindex(6)
+
+
+gui.SS_Form2..create
+gui.SS_Form2..caption("Weight")
+gui.SS_Form2..size(2640,3285)
+gui.SS_Form2..position(0,0)
+gui.SS_Form2..event(unload,Unload)
+gui.SS_Form2..alwaysontop(False)
+gui.SS_Form2..fontname("Arial")
+gui.SS_Form2..fontsize(8)
+gui.SS_Form2..forecolor(0)
+gui.SS_Form2..fontstyle(,,,,)
+gui.SS_Form2..BackColor(-2147483633)
+gui.SS_Form2..controlbox(True)
+gui.SS_Form2..maxbutton(False)
+gui.SS_Form2..minbutton(False)
+gui.SS_Form2..mousepointer(0)
+gui.SS_Form2..moveable(True)
+gui.SS_Form2..sizeable(False)
+gui.SS_Form2..ShowInTaskBar(True)
+gui.SS_Form2..titlebar(True)
+gui.SS_Form2.lbl_ddlSelection.create(label,"Selection",True,1800,200,1,100,100,True,0,Arial,8,-2147483633,0)
+gui.SS_Form2.ddlSelection.create(dropdownlist)
+gui.SS_Form2.ddlSelection.visible(True)
+gui.SS_Form2.ddlSelection.size(2200,330)
+gui.SS_Form2.ddlSelection.zorder(0)
+gui.SS_Form2.ddlSelection.position(100,300)
+gui.SS_Form2.ddlSelection.enabled(True)
+gui.SS_Form2.ddlSelection.fontname("Arial")
+gui.SS_Form2.ddlSelection.fontsize(8)
+gui.SS_Form2.ddlSelection.event(click,ddlselection_click)
+gui.SS_Form2.lbl_txtFragment.create(label,"Fragment",True,1800,200,1,100,680,True,0,Arial,8,-2147483633,0)
+gui.SS_Form2.txtFragment.create(textbox,"",True,1800,330,0,100,880,True,0,Arial,8,16777215,1)
+gui.SS_Form2.txtFragment.event(change,txtfragment_change)
+gui.SS_Form2.cmd_txtFragment.create(button)
+gui.SS_Form2.cmd_txtFragment.caption("^")
+gui.SS_Form2.cmd_txtFragment.visible(True)
+gui.SS_Form2.cmd_txtFragment.size(330,330)
+gui.SS_Form2.cmd_txtFragment.zorder(0)
+gui.SS_Form2.cmd_txtFragment.position(1950,880)
+gui.SS_Form2.cmd_txtFragment.enabled(True)
+gui.SS_Form2.cmd_txtFragment.fontname("Arial")
+gui.SS_Form2.cmd_txtFragment.fontsize(8)
+gui.SS_Form2.cmd_txtFragment.event(click,cmd_txtfragment_click)
+gui.SS_Form2.lbl_txtWeight.create(label,"Diameter",True,1800,200,1,100,1260,True,0,Arial,8,-2147483633,0)
+gui.SS_Form2.txtDiameter.create(textbox,"",True,1800,330,0,100,1460,True,0,Arial,8,16777215,1)
+gui.SS_Form2.txtDiameter.event(change,txtdiameter_change)
+gui.SS_Form2.txtDiameter.numericonly(1)
+gui.SS_Form2.cmdSave.create(button)
+gui.SS_Form2.cmdSave.caption("Save")
+gui.SS_Form2.cmdSave.visible(True)
+gui.SS_Form2.cmdSave.size(1000,360)
+gui.SS_Form2.cmdSave.zorder(0)
+gui.SS_Form2.cmdSave.position(100,2400)
+gui.SS_Form2.cmdSave.enabled(True)
+gui.SS_Form2.cmdSave.fontname("Arial")
+gui.SS_Form2.cmdSave.fontsize(8)
+gui.SS_Form2.cmdSave.event(click,Save_Weight)
+gui.SS_Form2.lbl4.create(label,"Weight",True,1800,200,1,100,1800,True,0,Arial,8,-2147483633,0)
+gui.SS_Form2.txtWeight.create(textbox,"",True,1800,330,0,100,2000,True,0,Arial,8,16777215,1)
+gui.SS_Form2.txtWeight.numericonly(1)
+gui.SS_Form2.cmdDiameter2.create(button)
+gui.SS_Form2.cmdDiameter2.caption("^")
+gui.SS_Form2.cmdDiameter2.visible(True)
+gui.SS_Form2.cmdDiameter2.size(330,330)
+gui.SS_Form2.cmdDiameter2.zorder(0)
+gui.SS_Form2.cmdDiameter2.position(1950,1460)
+gui.SS_Form2.cmdDiameter2.enabled(True)
+gui.SS_Form2.cmdDiameter2.fontname("Arial")
+gui.SS_Form2.cmdDiameter2.fontsize(8)
+gui.SS_Form2.cmdDiameter2.event(click,cmddiameter2_click)
+gui.SS_Form2.ddlSelection.tabstop(true)
+gui.SS_Form2.ddlSelection.tabindex(1)
+gui.SS_Form2.cmdDiameter2.tabstop(true)
+gui.SS_Form2.cmdDiameter2.tabindex(2)
+gui.SS_Form2.cmd_txtFragment.tabstop(true)
+gui.SS_Form2.cmd_txtFragment.tabindex(3)
+gui.SS_Form2.txtWeight.tabstop(true)
+gui.SS_Form2.txtWeight.tabindex(4)
+gui.SS_Form2.cmdSave.tabstop(true)
+gui.SS_Form2.cmdSave.tabindex(5)
+
+
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+
+Program.Sub.Definition.DefaultArgs("Check_Part_Frag","Cat*!*Frag")
+Variable.Global.sPart.Declare(String)
+Variable.Global.sLoc.Declare(String)
+Variable.Global.fWeight.Declare(Float,0)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'Coded by: SMC
+'Project Start Date: 4/20/2011
+'Hooks:
+'  INV122A-OPEN-WINDOW-HOOK (000014515)
+'  INV122A-SCRIPT-1-HOOK (000014550)
+'  INV122A-SCRIPT-2-HOOK (000014560)
+'  INV122A-POST-SAVE-HOOK (000014530)
+'Notes:
+'  Quote 2058 for Customer C& B Piping
+'
+'  First a GAB program will be hooked to one of the Script buttons on the Part Number Generator screen.  When launched the program will have two text boxes with browsers.  The browsers will allow the user to select a fragment selection from the PART_GEN_FRAGMENT
+'  table.  The first field is DIAMETER which is CAT_ID 04 in table.  The next is CLASS which is CAT_ID 08 in table.  The user will select a DIAMETER, then a CLASS, and there will be a text box that labelled with Lbs Per Foot.  The user will put in a pound per foot number into
+'  this field and click save.  This will be saved to a table with:  ATG_PART_FRAG_LPF (DIAMETER, CLASS, LBPERFOOT)
+'
+'  If the user comes back and selects a DIAMETER and CLASS that already have a record existing it will open that record back up and populate the Lbs per foot into the text box.
+'
+'  Another GAB program will be also hooked to a Script BUTTON.  This one the user will have a drop down selection to pick LEADING END, MIDDLE, or TRAILING END DIAMETER.  Once selected there will be a browser to select CAT_ID 01,02,03, 04 based on selection
+'  made in drop down.  The user will be a fragment choice and then a text box will ask for Weight.  This will be a number field.  This information will be stored into a table:  ATG_PART_FRAG_LBS (SELECTION_TYPE, FRAGMENT, WEIGHT)
+'
+'  A program will be hooked to the Post-Create hook.  this program will check each of the forementioned categories to calculate a weight to save to the inventory master record of the part being generated.  LEADING END, MIDDLE AND TRAILING END will be added together.
+'   The LENGTH FEET, LENTH INCH, AND LENTH INCH 16THS, will have to be calculated out to a number based on a foot, and multiplied by the weight per foot of the DIAMETER/CLASS selection made.  This # is then added into the first calculation for a total weight of part.
+'
+'  Lastly there will be a GAB program for uploading fragments and weights into the table from a Excel spreadsheet.  As well as uploading the lbs per ft based on diameter and class.
+
+F.Intrinsic.Control.If(V.Caller.Hook,=,14515)
+	V.Passed.000083.Set("Lb Per Ft")
+	V.Passed.000084.Set("Weight")
+	F.Intrinsic.Control.End
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Debug.Stop
+V.Local.sFile.Declare(String)
+V.Local.bExists.Declare(Boolean)
+V.Local.sText.Declare(String)
+F.ODBC.Connection!conx.OpenConnection(V.Ambient.PDSN,V.Ambient.PUser,V.Ambient.PPass)
+F.Intrinsic.Control.If(V.Caller.Hook,=,14550)
+	Gui.SS_Form1..Show
+F.Intrinsic.Control.ElseIf(V.Caller.Hook,=,14560)
+	Gui.SS_Form2.ddlSelection.AddItem("Leading End","01")
+	Gui.SS_Form2.ddlSelection.AddItem("Middle","02")
+	Gui.SS_Form2.ddlSelection.AddItem("Trailing End","03")
+	Gui.SS_Form2.ddlSelection.Text("Leading End")
+	Gui.SS_Form2..Show
+F.Intrinsic.Control.ElseIf(V.Caller.Hook,=,14530)
+	'Post-Save - Calculate Weight and write to Inventory
+	V.Global.sPart.Set(V.Passed.000001)
+	V.Global.sLoc.Set(V.Passed.000022)
+	F.Intrinsic.Control.CallSub(Calculate_weight)
+	F.Intrinsic.Control.CallSub(Update_weight)
+	F.Intrinsic.Control.Callsub(Unload)
+F.Intrinsic.Control.ElseIf(V.Caller.Hook,=,0)
+	Gui.SS_Form2.ddlSelection.AddItem("Leading End","01")
+	Gui.SS_Form2.ddlSelection.AddItem("Middle","02")
+	Gui.SS_Form2.ddlSelection.AddItem("Trailing End","03")
+	Gui.SS_Form2.ddlSelection.Text("Leading End")
+	Gui.SS_Form2..Show
+F.Intrinsic.Control.Else
+	F.Intrinsic.Control.Callsub(Unload)
+F.Intrinsic.Control.EndIf
+
+
+Program.Sub.Main.End
+
+Program.Sub.Save_Lbs_Per_Foot.Start
+V.Local.sQuery.Declare(String)
+
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+F.Intrinsic.Control.If(V.Screen.SS_Form1!txtLbsPerFoot.Text,=,"")
+	F.Intrinsic.UI.Msgbox("Please enter Lbs Per Foot")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Check_part_frag,"Cat","04","Frag",V.Screen.SS_Form1!txtDiameter.Text)
+F.Intrinsic.Control.If(V.Args.bExists,=,True)
+	F.Intrinsic.UI.Msgbox("Please select a valid Diameter")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.CallSub(Check_part_frag,"Cat","08","Frag",V.Screen.SS_Form1!txtClass.Text)
+F.Intrinsic.Control.If(V.Args.bExists,=,True)
+	F.Intrinsic.UI.Msgbox("Please select a valid Class")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+Gui.SS_Form1.cmdSave.Enabled(False)
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LPF WHERE DIAMETER='",V.Screen.SS_Form1!txtDiameter.Text,"' AND CLASS='",V.Screen.SS_Form1!txtClass.Text,"'",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRW("rstLPF",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLPF.EOF,=,True)
+	F.ODBC.conx!rstLPF.AddNew
+	F.ODBC.conx!rstLPF.Set!DIAMETER(V.Screen.SS_Form1!txtDiameter.Text)
+	F.ODBC.conx!rstLPF.Set!CLASS(V.Screen.SS_Form1!txtClass.Text)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLPF.Set!LBPERFOOT(V.Screen.SS_Form1!txtLbsPerFoot.Text)
+F.ODBC.conx!rstLPF.Update
+F.ODBC.conx!rstLPF.Close
+Gui.SS_Form1.cmdSave.Enabled(True)
+
+Program.Sub.Save_Lbs_Per_Foot.End
+
+Program.Sub.Update_Weight.Start
+V.Local.fFeet.Declare(Float)
+V.Local.fLbsPerFt.Declare(Float)
+V.Local.fWeight.Declare(Float)
+V.Local.sQuery.Declare(String)
+
+'Update Weight (Width field) in Inventory Master
+F.Intrinsic.String.Concat("SELECT LBS FROM INVENTORY_MST2 WHERE PART='",V.Global.sPart,"' AND LOCATION='",V.Global.sLoc,"'",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRW("rstPart",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstPart.EOF,<>,True)
+	F.ODBC.conx!rstPart.Set!LBS(V.Global.fWeight)
+	F.ODBC.conx!rstPart.Update
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstPart.Close
+
+
+Program.Sub.Update_Weight.End
+
+Program.Sub.Save_Weight.Start
+V.Local.sQuery.Declare(String)
+V.Local.sTemp.Declare(String)
+
+'F.Intrinsic.Debug.InvokeDebugger
+F.Intrinsic.Debug.Stop
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtWeight.Text,=,"")
+	F.Intrinsic.UI.Msgbox("Please enter Weight")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtDiameter.Text,=,"")
+	F.Intrinsic.UI.Msgbox("Please enter Diameter")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+F.Intrinsic.String.LPad(V.Screen.SS_Form2!ddlSelection.ItemData,"0",2,V.Local.sTemp)
+F.Intrinsic.Control.CallSub(Check_part_frag,"Cat",V.Local.sTemp,"Frag",V.Screen.SS_Form2!txtFragment.Text)
+F.Intrinsic.Control.If(V.Args.bExists,=,True)
+	F.Intrinsic.UI.Msgbox("Please select a valid Fragment")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+Gui.SS_Form2.cmdSave.Enabled(False)
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='",V.Screen.SS_Form2!ddlSelection.Text,"' AND FRAGMENT='",V.Screen.SS_Form2!txtFragment.Text,"' AND DIAMETER=",V.Screen.SS_Form2!txtDiameter.Text,V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRW("rstLBS",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLBS.EOF,=,True)
+	F.ODBC.conx!rstLBS.AddNew
+	F.ODBC.conx!rstLBS.Set!SELECTION_TYPE(V.Screen.SS_Form2!ddlSelection.Text)
+	F.ODBC.conx!rstLBS.Set!FRAGMENT(V.Screen.SS_Form2!txtFragment.Text)
+	F.ODBC.conx!rstLBS.Set!DIAMETER(V.Screen.SS_Form2!txtDiameter.Text)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLBS.Set!WEIGHT(V.Screen.SS_Form2!txtWeight.Text)
+F.ODBC.conx!rstLBS.Update
+F.ODBC.conx!rstLBS.Close
+Gui.SS_Form2.cmdSave.Enabled(True)
+
+
+
+Program.Sub.Save_Weight.End
+
+Program.Sub.Unload.Start
+F.ODBC.Connection!conx.Close
+F.Intrinsic.Control.End
+
+Program.Sub.Unload.End
+
+Program.Sub.Check_Part_Frag.Start
+V.Local.sQuery.Declare(String)
+V.Local.bExists.Declare(Boolean,False)
+
+F.Intrinsic.String.Concat("SELECT CAT_CD, PART_FRAGMENT FROM PART_GEN_FRAGMENT WHERE CAT_CD='",V.Args.Cat,"' AND PART_FRAGMENT='",V.Args.Frag,"'",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstFrag",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstFrag.EOF,=,True)
+	V.Local.bExists.Set(True)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstFrag.Close
+
+F.Intrinsic.Variable.AddRV("bExists",V.Local.bExists)
+
+Program.Sub.Check_Part_Frag.End
+
+program.sub.cmd_txtdiameter_click.start
+V.Local.sCols.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRet.Declare(String)
+
+F.Intrinsic.String.Split("Diameter*!*Description","*!*",V.Local.sCols)
+F.Intrinsic.String.Split("2000*!*4000","*!*",V.Local.sWidths)
+V.Local.sQuery.Set("SELECT PART_FRAGMENT, DESCR1 FROM PART_GEN_FRAGMENT WHERE CAT_CD='04'")
+
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser("Select a diameter","conx",V.Local.sQuery,V.Local.sCols,V.Local.sWidths,3000,5000,V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form1.txtDiameter.Text(V.Local.sRet(0).trim)
+F.Intrinsic.Control.EndIf
+
+
+program.sub.cmd_txtdiameter_click.end
+
+program.sub.cmd_txtclass_click.start
+V.Local.sCols.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRet.Declare(String)
+
+F.Intrinsic.String.Split("Class*!*Description","*!*",V.Local.sCols)
+F.Intrinsic.String.Split("2000*!*4000","*!*",V.Local.sWidths)
+V.Local.sQuery.Set("SELECT PART_FRAGMENT, DESCR1 FROM PART_GEN_FRAGMENT WHERE CAT_CD='08'")
+
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser("Select a class","conx",V.Local.sQuery,V.Local.sCols,V.Local.sWidths,3000,5000,V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form1.txtClass.Text(V.Local.sRet(0).trim)
+F.Intrinsic.Control.EndIf
+
+program.sub.cmd_txtclass_click.end
+
+program.sub.txtdiameter_change.start
+F.Intrinsic.Control.CallSub(Get_lbs_per_ft)
+
+
+
+program.sub.txtdiameter_change.end
+
+program.sub.txtclass_change.start
+F.Intrinsic.Control.CallSub(Get_lbs_per_ft)
+
+program.sub.txtclass_change.end
+
+Program.Sub.Get_Lbs_Per_Ft.Start
+Gui.SS_Form1..Enabled(False)
+V.Local.sQuery.Declare(String)
+
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LPF WHERE DIAMETER='",V.Screen.SS_Form1!txtDiameter.Text,"' AND CLASS='",V.Screen.SS_Form1!txtClass.Text,"'",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLPF",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLPF.EOF,<>,True)
+	Gui.SS_Form1.txtLbsPerFoot.Text(V.ODBC.conx!rstLPF.FieldValTrim!LBPERFOOT)
+F.Intrinsic.Control.Else
+	Gui.SS_Form1.txtLbsPerFoot.Text("")
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLPF.Close
+
+Gui.SS_Form1..Enabled(True)
+
+
+
+Program.Sub.Get_Lbs_Per_Ft.End
+
+program.sub.txtfragment_change.start
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtFragment.Text,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtDiameter.Text,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+Gui.SS_Form2..Enabled(False)
+V.Local.sQuery.Declare(String)
+
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='",V.Screen.SS_Form2!ddlSelection.Text,"' AND FRAGMENT='",V.Screen.SS_Form2!txtFragment.Text,"' AND DIAMETER=",V.Screen.SS_Form2!txtDiameter.Text,V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLbs",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLbs.EOF,<>,True)
+	Gui.SS_Form2.txtWeight.Text(V.ODBC.conx!rstLbs.FieldValTrim!WEIGHT)
+F.Intrinsic.Control.Else
+	Gui.SS_Form2.txtWeight.Text("")
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLbs.Close
+
+Gui.SS_Form2..Enabled(True)
+
+
+
+
+program.sub.txtfragment_change.end
+
+program.sub.cmd_txtfragment_click.start
+V.Local.sCols.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRet.Declare(String)
+
+F.Intrinsic.String.Split("Fragment*!*Description","*!*",V.Local.sCols)
+F.Intrinsic.String.Split("2000*!*4000","*!*",V.Local.sWidths)
+F.Intrinsic.String.LPad(V.Screen.SS_Form2!ddlSelection.ItemData,"0",2,V.Local.sQuery)
+F.Intrinsic.String.Concat("SELECT PART_FRAGMENT, DESCR1 FROM PART_GEN_FRAGMENT WHERE CAT_CD='",V.Local.sQuery,"'",V.Local.sQuery)
+
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser("Select a fragment","conx",V.Local.sQuery,V.Local.sCols,V.Local.sWidths,3000,5000,V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form2.txtFragment.Text(V.Local.sRet(0).trim)
+F.Intrinsic.Control.EndIf
+
+
+
+program.sub.cmd_txtfragment_click.end
+
+program.sub.ddlselection_click.start
+F.Intrinsic.Control.If(V.Screen.SS_Form2!ddlSelection.MetaData0.long,<>,V.Screen.SS_Form2!ddlSelection.ItemData.long)
+	Gui.SS_Form2.txtFragment.Text("")
+	Gui.SS_Form2.txtWeight.Text("")
+	gui.SS_Form2.ddlSelection.SetMetaData(V.Screen.SS_Form2!ddlSelection.ItemData)
+F.Intrinsic.Control.EndIf
+
+program.sub.ddlselection_click.end
+
+Program.Sub.Calculate_Weight.Start
+V.Local.fFeet.Declare(Float)
+V.Local.fLbsPerFt.Declare(Float)
+V.Local.fWeight.Declare(Float)
+V.Local.sQuery.Declare(String)
+V.Local.sFile.Declare(String)
+
+'Get Lbs Per Feet from Diameter/Class
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LPF WHERE DIAMETER='",V.Passed.000010,"' AND CLASS='",V.Passed.000029,"'",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLPF",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLPF.EOF,<>,True)
+	V.Local.fLbsPerFt.Set(V.ODBC.conx!rstLPF.FieldValTrim!LBPERFOOT)
+
+	F.Intrinsic.Debug.Stop
+	'Divide Length Inch 16ths by 16 to get inches
+	F.Intrinsic.Math.Div(V.Passed.000021,16,V.Local.fFeet)
+	'Add Lengh Inch to get total inches
+	F.Intrinsic.Math.Add(V.Passed.000012,V.Local.fFeet,V.Local.fFeet)
+	'Divide current by 12 to get feet
+	F.Intrinsic.Math.Div(V.Local.fFeet,12,V.Local.fFeet)
+	'Add Length Feet to get total feet
+	F.Intrinsic.Math.Add(V.Passed.000011,V.Local.fFeet,V.Local.fFeet)
+
+	'Multiply Feet by Lbs/Ft to get Lbs
+	F.Intrinsic.Math.Mult(V.Local.fFeet,V.Local.fLbsPerFt,V.Local.fWeight)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLPF.Close
+F.Intrinsic.Debug.Stop
+
+'Add Leading End Weight
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='Leading End' AND FRAGMENT='",V.Passed.000006,"' and  DIAMETER='",V.Passed.000010,"' ",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLbs",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLbs.EOF,<>,True)
+	F.Intrinsic.Math.Add(V.ODBC.conx!rstLbs.FieldValTrim!WEIGHT,V.Local.fWeight,V.Local.fWeight)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLbs.Close
+F.Intrinsic.Debug.Stop
+
+'Add Middle Weight
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='Middle' AND FRAGMENT='",V.Passed.000007,"' and  DIAMETER='",V.Passed.000010,"' ",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLbs",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLbs.EOF,<>,True)
+	F.Intrinsic.Math.Add(V.ODBC.conx!rstLbs.FieldValTrim!WEIGHT,V.Local.fWeight,V.Local.fWeight)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLbs.Close
+F.Intrinsic.Debug.Stop
+
+'Add Trailing End Weight
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='Trailing End' AND FRAGMENT='",V.Passed.000009,"' and  DIAMETER='",V.Passed.000010,"' ",V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLbs",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLbs.EOF,<>,True)
+	F.Intrinsic.Math.Add(V.ODBC.conx!rstLbs.FieldValTrim!WEIGHT,V.Local.fWeight,V.Local.fWeight)
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLbs.Close
+F.Intrinsic.Debug.Stop
+
+V.Global.fWeight.Set(V.Local.fWeight)
+
+
+
+Program.Sub.Calculate_Weight.End
+
+program.sub.txtdiameter_change2.start
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtDiameter.Text,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+F.Intrinsic.Control.If(V.Screen.SS_Form2!txtFragment.Text,=,"")
+	F.Intrinsic.Control.ExitSub
+F.Intrinsic.Control.EndIf
+
+Gui.SS_Form2..Enabled(False)
+V.Local.sQuery.Declare(String)
+
+F.Intrinsic.String.Concat("SELECT * FROM ATG_3601_PART_FRAG_LBS WHERE SELECTION_TYPE='",V.Screen.SS_Form2!ddlSelection.Text,"' AND FRAGMENT='",V.Screen.SS_Form2!txtFragment.Text,"' AND DIAMETER=",V.Screen.SS_Form2!txtDiameter.Text,V.Local.sQuery)
+F.ODBC.Connection!conx.OpenRecordsetRO("rstLbs",V.Local.sQuery)
+F.Intrinsic.Control.If(V.ODBC.conx!rstLbs.EOF,<>,True)
+	Gui.SS_Form2.txtWeight.Text(V.ODBC.conx!rstLbs.FieldValTrim!WEIGHT)
+F.Intrinsic.Control.Else
+	Gui.SS_Form2.txtWeight.Text("")
+F.Intrinsic.Control.EndIf
+F.ODBC.conx!rstLbs.Close
+
+Gui.SS_Form2..Enabled(True)
+
+
+
+
+
+program.sub.txtdiameter_change2.end
+
+program.sub.cmddiameter2_click.start
+V.Local.sCols.Declare(String)
+V.Local.sWidths.Declare(String)
+V.Local.sQuery.Declare(String)
+V.Local.sRet.Declare(String)
+
+F.Intrinsic.String.Split("Diameter*!*Description","*!*",V.Local.sCols)
+F.Intrinsic.String.Split("2000*!*4000","*!*",V.Local.sWidths)
+V.Local.sQuery.Set("SELECT PART_FRAGMENT, DESCR1 FROM PART_GEN_FRAGMENT WHERE CAT_CD='04'")
+
+F.Intrinsic.UI.SetBrowserHotTypeAhead(True)
+F.Intrinsic.UI.Browser("Select a diameter","conx",V.Local.sQuery,V.Local.sCols,V.Local.sWidths,3000,5000,V.Local.sRet)
+F.Intrinsic.Control.If(V.Local.sRet,<>,"***CANCEL***")
+	F.Intrinsic.String.Split(V.Local.sRet,"*!*",V.Local.sRet)
+	Gui.SS_Form2.txtDiameter.Text(V.Local.sRet(0).trim)
+F.Intrinsic.Control.EndIf
+
+
+
+program.sub.cmddiameter2_click.end
+
+
